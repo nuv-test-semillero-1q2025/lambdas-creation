@@ -1,0 +1,67 @@
+name: Crear o actualizar Lambda
+
+on:
+  push:
+    branches:
+        # Revisar el nombre de la rama en github
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repo
+        uses: actions/checkout@v4
+
+      - name: Instalar jq
+        run: sudo apt-get install jq -y
+
+      - name: Configurar AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} 
+          aws-region: us-east-1
+
+      - name: Empaquetar Lambda - ejemplo
+        run: |
+          sudo apt install zip
+          python -m pip install --upgrade python
+          cd lambda
+          mkdir -p lambda_zip
+          pip install -r requirements.txt -t lambda_zip
+          cp lambda_function.py lambda_zip
+          cd lambda_zip
+          zip -r lambda_zip.zip *
+           
+
+      - name: Crear o actualizar Lambda
+        run: |
+          CONFIG=$(cat config.json)
+          FUNCTION_NAME=$(echo $CONFIG | jq -r '.FunctionName')
+          ROLE=$(echo $CONFIG | jq -r '.Role')
+          HANDLER=$(echo $CONFIG | jq -r '.Handler')
+          RUNTIME=$(echo $CONFIG | jq -r '.Runtime')
+          TIMEOUT=$(echo $CONFIG | jq -r '.Timeout')
+          MEMORY=$(echo $CONFIG | jq -r '.MemorySize')
+
+          echo "Intentando crear Lambda $FUNCTION_NAME..."
+
+          aws lambda create-function \
+            --function-name "$FUNCTION_NAME" \
+            --runtime "$RUNTIME" \
+            --role "$ROLE" \
+            --handler "$HANDLER" \
+            --zip-file fileb://lambda/lambda_zip/lambda_zip.zip \
+            --timeout "$TIMEOUT" \
+            --memory-size "$MEMORY" \
+          || {
+            echo "Ya existe, actualizando código..."
+            aws lambda update-function-code \
+              --function-name "$FUNCTION_NAME" \
+              --zip-file fileb://lambda/lambda_zip/lambda_zip.zip
+          }
+
+        # esperando que funcione
