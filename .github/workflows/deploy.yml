@@ -28,7 +28,7 @@ jobs:
       - name: Empaquetar Lambda - ejemplo
         run: |
           sudo apt install zip
-          python -m pip install --upgrade python
+          # python -m pip install --upgrade python
           cd lambda
           mkdir -p lambda_zip
           pip install -r requirements.txt -t lambda_zip
