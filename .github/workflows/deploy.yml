@@ -17,12 +17,10 @@ jobs:
       - name: Instalar jq
         run: sudo apt-get install jq -y
 
-      - name: Configurar AWS
+      - name: Configurar AWS credenciales via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          # aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} 
+          role-to-assume: arn:aws:iam::891377180652:role/GitHub-Federated-Rol
           aws-region: us-east-1
 
       - name: Empaquetar Lambda - ejemplo

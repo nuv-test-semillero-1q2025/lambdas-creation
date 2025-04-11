@@ -16,10 +16,12 @@ jobs:
       - name: Configurar credenciales AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          # aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} 
+          role-to-assume: arn:aws:iam::891377180652:role/GitHub-Federated-Rol
           aws-region: us-east-1  # cambia si usas otra región
+
+      - name: Test AWS CLI
+        run: aws sts get-caller-identity
+        
 
       - name: Instalar dependencias y crear ZIP
         run: |
