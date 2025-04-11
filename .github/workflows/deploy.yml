@@ -37,7 +37,6 @@ jobs:
           cp lambda_function.py lambda_zip
           cd lambda_zip
           zip -r lambda_zip.zip *
-          mv lambda_zip.zip ../lambda_zip.zip
            
 
       - name: Crear o actualizar Lambda
@@ -58,14 +57,14 @@ jobs:
             --runtime "$RUNTIME" \
             --role "$ROLE" \
             --handler "$HANDLER" \
-            --zip-file fileb://lambda/lambda_zip.zip \
+            --zip-file fileb://lambda/lambda_zip/lambda_zip.zip \
             --timeout "$TIMEOUT" \
             --memory-size "$MEMORY" \
           || {
             echo "Ya existe, actualizando código..."
             aws lambda update-function-code \
               --function-name "$FUNCTION_NAME" \
-              --zip-file fileb://lambda/lambda_zip.zip
+              --zip-file fileb://lambda/lambda_zip/lambda_zip.zip
           }
 
         # # python -m pip install --upgrade python - para la linea 31 - Pendiente por confirmar
