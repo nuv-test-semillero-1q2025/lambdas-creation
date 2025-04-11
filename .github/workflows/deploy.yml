@@ -38,6 +38,7 @@ jobs:
 
       - name: Crear o actualizar Lambda
         run: |
+          cd lambda
           CONFIG=$(cat config.json)
           FUNCTION_NAME=$(echo $CONFIG | jq -r '.FunctionName')
           ROLE=$(echo $CONFIG | jq -r '.Role')
@@ -63,5 +64,4 @@ jobs:
               --zip-file fileb://lambda/lambda_zip/lambda_zip.zip
           }
 
-        # esperando que funcione
         # # python -m pip install --upgrade python - para la linea 31 - Pendiente por confirmar

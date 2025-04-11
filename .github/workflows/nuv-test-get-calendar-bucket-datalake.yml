@@ -1,0 +1,39 @@
+name: Desplegar Lambda en AWS - Test
+
+on:
+  push:
+    branches:
+      - master  # o la rama que uses
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar el repo de lambda actualizada
+        uses: actions/checkout@v4
+
+      - name: Configurar credenciales AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} 
+          aws-region: us-east-1  # cambia si usas otra región
+
+      - name: Instalar dependencias y crear ZIP
+        run: |
+          sudo apt install zip
+          python -m pip install --upgrade pip
+          cd nuv-test-get-calendar-bucket-datalake
+          mkdir -p lambda_to_deploy
+          pip install -r requirements.txt -t lambda_to_deploy
+          cp lambda_function.py lambda_to_deploy
+          cd lambda_to_deploy
+          zip -r lambda_zip.zip *
+
+      - name: Desplegar a AWS Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name nuv-test-get-calendar-bucket-datalake \
+            --zip-file fileb://nuv-test-get-calendar-bucket-datalake/lambda_to_deploy/lambda_zip.zip
