@@ -36,11 +36,7 @@ jobs:
           pip install -r requirements.txt -t lambda_zip
           cp lambda_function.py lambda_zip
           zip -r lambda_zip.zip *
-           
-
-      - name: Crear o actualizar Lambda
-        run: |
-          cd lambda
+        
           CONFIG=$(cat config.json)
           FUNCTION_NAME=$(echo $CONFIG | jq -r '.FunctionName')
           ROLE=$(echo $CONFIG | jq -r '.Role')
@@ -54,6 +50,8 @@ jobs:
           aws lambda create-function \
             --function-name "$FUNCTION_NAME" \
             --runtime "$RUNTIME" \
+
+
             --role "$ROLE" \
             --handler "$HANDLER" \
             --zip-file fileb://lambda/lambda_zip/lambda_zip.zip \
