@@ -6,6 +6,11 @@ on:
         # Revisar el nombre de la rama en github
       - main
 
+permissions:
+  id-token: write
+  contents: read
+  
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
