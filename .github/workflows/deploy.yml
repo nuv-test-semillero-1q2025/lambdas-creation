@@ -36,7 +36,10 @@ jobs:
           pip install -r requirements.txt -t lambda_zip
           cp lambda_function.py lambda_zip
           cd lambda_zip
-          zip -r lambda_zip.zip *
+          zip -r ../lambda_zip.zip *
+          cd ..
+          echo "Contenido del directorio lambda_zip:"
+          ls -l lambda/lambda_zip/lambda_zip.zip
            
 
       - name: Crear o actualizar Lambda
@@ -49,6 +52,11 @@ jobs:
           RUNTIME=$(echo $CONFIG | jq -r '.Runtime')
           TIMEOUT=$(echo $CONFIG | jq -r '.Timeout')
           MEMORY=$(echo $CONFIG | jq -r '.MemorySize')
+
+          if [ ! -f "lambda_zip.zip" ]; then
+            echo "Error: El archivo ZIP no se creó correctamente."
+            exit 1
+          fi
 
           echo "Intentando crear Lambda $FUNCTION_NAME..."
 
