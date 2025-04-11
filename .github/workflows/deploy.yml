@@ -39,7 +39,7 @@ jobs:
           zip -r ../lambda_zip.zip *
           cd ..
           echo "Contenido del directorio lambda_zip:"
-          ls -l lambda/lambda_zip/lambda_zip.zip
+         # ls -l lambda/lambda_zip/lambda_zip.zip
            
 
       - name: Crear o actualizar Lambda
