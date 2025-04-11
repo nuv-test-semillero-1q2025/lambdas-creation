@@ -21,7 +21,7 @@ jobs:
       - name: Configurar credenciales AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::891377180652:role/GitHub-Federated-Rol
+          role-to-assume: arn:aws:iam::891377180652:role/GitHubActionsOIDC-DeployRole
           aws-region: us-east-1
 
       - name: Test AWS CLI

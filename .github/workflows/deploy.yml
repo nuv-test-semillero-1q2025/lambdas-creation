@@ -9,7 +9,7 @@ on:
 permissions:
   id-token: write
   contents: read
-  
+
 
 jobs:
   deploy:
@@ -25,7 +25,7 @@ jobs:
       - name: Configurar AWS credenciales via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::891377180652:role/GitHub-Federated-Rol
+          role-to-assume: arn:aws:iam::891377180652:role/GitHubActionsOIDC-DeployRole
           aws-region: us-east-1
 
       - name: Empaquetar Lambda - ejemplo
