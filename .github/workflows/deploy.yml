@@ -41,7 +41,6 @@ jobs:
 
       - name: Crear o actualizar Lambda
         run: |
-          cd lambda
           CONFIG=$(cat config.json)
           FUNCTION_NAME=$(echo $CONFIG | jq -r '.FunctionName')
           ROLE=$(echo $CONFIG | jq -r '.Role')
