@@ -3,7 +3,7 @@ name: Desplegar Lambda en AWS - Test
 on:
   push:
     branches:
-      - master  # o la rama que uses
+      - main  # o la rama que uses
 
 permissions:
   id-token: write
