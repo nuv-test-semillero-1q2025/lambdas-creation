@@ -47,7 +47,7 @@ jobs:
           mkdir -p lambda_zip
           pip install -r requirements.txt -t lambda_zip
           cp lambda_function.py lambda_zip
-          zip -r ../lambda_zip.zip . --exlude ../config.json
+          zip -r ../lambda_zip.zip . --exclude ../config.json
           
           cd ..
 
