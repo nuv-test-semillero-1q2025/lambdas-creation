@@ -47,8 +47,8 @@ jobs:
           mkdir -p lambda_zip
           pip install -r requirements.txt -t lambda_zip
           cp lambda_function.py lambda_zip
-          zip -r ../lambda_zip.zip . --exclude ../config.json
-          
+          cd lambda_zip
+          zip -r ../lambda_zip.zip . --exclude ../config.json  # Excluye config.json
           cd ..
 
           echo "Intentando crear Lambda $FUNCTION_NAME..."
@@ -67,5 +67,4 @@ jobs:
               --function-name "$FUNCTION_NAME" \
               --zip-file fileb://lambda/lambda_zip.zip
           }
-
         # # python -m pip install --upgrade python - para la linea 31 - Pendiente por confirmar
