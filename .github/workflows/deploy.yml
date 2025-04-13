@@ -30,7 +30,7 @@ jobs:
 
       - name: Empaquetar Lambda - ejemplo
         run: |
-          sudo apt install zip
+          sudo apt install zip -y
           cd lambda
           mkdir -p lambda_zip
           pip install -r requirements.txt -t lambda_zip
@@ -50,8 +50,6 @@ jobs:
           aws lambda create-function \
             --function-name "$FUNCTION_NAME" \
             --runtime "$RUNTIME" \
-
-
             --role "$ROLE" \
             --handler "$HANDLER" \
             --zip-file fileb://lambda/lambda_zip/lambda_zip.zip \
