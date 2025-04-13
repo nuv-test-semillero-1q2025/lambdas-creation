@@ -34,7 +34,7 @@ def lambda_handler(event, context):
                 raise e
         else: 
             print(f"Skipping file {object_key} as it does not match the criteria.")
-            print('Test del flujo de GitHub')
+            print('Test del flujo de GitHub, nueva prueba')
 
     return {
         'statusCode': 200,
