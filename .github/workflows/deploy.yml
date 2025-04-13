@@ -52,14 +52,14 @@ jobs:
             --runtime "$RUNTIME" \
             --role "$ROLE" \
             --handler "$HANDLER" \
-            --zip-file fileb://lambda/lambda_zip/lambda_zip.zip \
+            --zip-file fileb:///lambda_zip/lambda_zip.zip \
             --timeout "$TIMEOUT" \
             --memory-size "$MEMORY" \
           || {
             echo "Ya existe, actualizando código..."
             aws lambda update-function-code \
               --function-name "$FUNCTION_NAME" \
-              --zip-file fileb://lambda/lambda_zip/lambda_zip.zip
+              --zip-file fileb:///lambda_zip/lambda_zip.zip
           }
 
         # # python -m pip install --upgrade python - para la linea 31 - Pendiente por confirmar
