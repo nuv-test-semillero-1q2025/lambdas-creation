@@ -31,13 +31,9 @@ jobs:
       - name: Empaquetar Lambda - ejemplo
         run: |
           sudo apt install zip -y
+
           cd lambda
-          mkdir -p lambda_zip
-          pip install -r requirements.txt -t lambda_zip
-          cp lambda_function.py lambda_zip
-          zip -r lambda_zip.zip *
-          
-          cd ..
+
           CONFIG=$(cat config.json)
           FUNCTION_NAME=$(echo $CONFIG | jq -r '.FunctionName')
           ROLE=$(echo $CONFIG | jq -r '.Role')
@@ -46,6 +42,15 @@ jobs:
           TIMEOUT=$(echo $CONFIG | jq -r '.Timeout')
           MEMORY=$(echo $CONFIG | jq -r '.MemorySize')
 
+          echo "Creando Lambda $FUNCTION_NAME..."
+
+          mkdir -p lambda_zip
+          pip install -r requirements.txt -t lambda_zip
+          cp lambda_function.py lambda_zip
+          zip -r ../lambda_zip.zip . --exlude ../config.json
+          
+          cd ..
+
           echo "Intentando crear Lambda $FUNCTION_NAME..."
 
           aws lambda create-function \
@@ -53,14 +58,14 @@ jobs:
             --runtime "$RUNTIME" \
             --role "$ROLE" \
             --handler "$HANDLER" \
-            --zip-file fileb://lambda_zip/lambda_zip.zip \
+            --zip-file fileb://lambda/lambda_zip.zip \
             --timeout "$TIMEOUT" \
             --memory-size "$MEMORY" \
           || {
             echo "Ya existe, actualizando código..."
             aws lambda update-function-code \
               --function-name "$FUNCTION_NAME" \
-              --zip-file fileb://lambda_zip/lambda_zip.zip
+              --zip-file fileb://lambda/lambda_zip.zip
           }
 
         # # python -m pip install --upgrade python - para la linea 31 - Pendiente por confirmar
