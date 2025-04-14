@@ -1,4 +1,4 @@
-name: Desplegar Lambda en AWS - Test
+name: Desplegar Lambda en AWS
 
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
         run: |
           sudo apt install zip
           python -m pip install --upgrade pip
-          cd nuv-test-get-calendar-bucket-datalake
+          cd nuv-test-activate-calendar-glue-ELTJob
           mkdir -p lambda_to_deploy
           pip install -r requirements.txt -t lambda_to_deploy
           cp lambda_function.py lambda_to_deploy
@@ -42,5 +42,5 @@ jobs:
       - name: Desplegar a AWS Lambda
         run: |
           aws lambda update-function-code \
-            --function-name nuv-test-get-calendar-bucket-datalake \
-            --zip-file fileb://nuv-test-get-calendar-bucket-datalake/lambda_to_deploy/lambda_zip.zip
+            --function-name nuv-test-activate-calendar-glue-ELTJob \
+            --zip-file fileb://nuv-test-activate-calendar-glue-ELTJob/lambda_to_deploy/lambda_zip.zip

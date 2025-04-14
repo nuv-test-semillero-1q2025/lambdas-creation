@@ -1,10 +1,11 @@
-name: Crear o actualizar Lambda
+name: Crear o actualizacion de Lambdas
 
 on:
   push:
     branches:
-        # Revisar el nombre de la rama en github
+
       - main
+
 
 permissions:
   id-token: write
@@ -28,7 +29,7 @@ jobs:
           role-to-assume: arn:aws:iam::891377180652:role/GitHubActionsOIDC-DeployRole
           aws-region: us-east-1
 
-      - name: Empaquetar Lambda - ejemplo
+      - name: Empaquetar Lambda
         run: |
           sudo apt install zip -y
 
@@ -52,7 +53,7 @@ jobs:
 
           cd ..
 
-
+          
           echo "Intentando crear Lambda $FUNCTION_NAME..."
 
           aws lambda create-function \
@@ -69,4 +70,5 @@ jobs:
               --function-name "$FUNCTION_NAME" \
               --zip-file fileb://lambda_zip.zip
           }
-        # # python -m pip install --upgrade python - para la linea 31 - Pendiente por confirmar
+              
+          echo "Lambda $FUNCTION_NAME creada o actualizada con éxito."

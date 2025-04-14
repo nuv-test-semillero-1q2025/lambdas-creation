@@ -1,7 +1,6 @@
 import json
 import boto3
 from urllib.parse import unquote_plus
-# import loggin as logger
 
 # Initialize the S3 client to interact with S3
 s3 = boto3.client('s3')
@@ -11,8 +10,6 @@ destination_bucket = 'nuv-test-calendar-datalake'  # Bucket in Account Universid
 
 def lambda_handler(event, context):
 
-    # logger.info(event)
-    # Get the file details from the event
     for record in event['Records']:
         # Extract the object key (file name)
         bucket_name = unquote_plus(record['s3']['bucket']['name'])
@@ -20,6 +17,8 @@ def lambda_handler(event, context):
 
         URI = f"s3://{bucket_name}/{object_key}"
 
+        # check the procedence of the file - confirm the authorize file name to copy
+        # Check if the object key contains "AREO_Data in its name"
         if "AREO_Data" in URI.split('/')[4]:
         
             try:
